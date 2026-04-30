@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Әкеме 🎖️</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+KZ:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+html, body { width:100%; min-height:100vh; }
+
+:root {
+  --rose:  #c0315a;
+  --rose2: #e8507a;
+  --gold:  #c8860a;
+  --glt:   #f0c040;
+  --text:  #1e0e18;
+  --mute:  #8a6070;
+  --card:  rgba(255,255,255,0.96);
+  --bdr:   rgba(192,49,90,0.14);
+  --shd:   0 12px 48px rgba(192,49,90,0.13), 0 2px 8px rgba(0,0,0,0.05);
+}
+
+body {
+  background: linear-gradient(150deg, #fff5f8 0%, #fdf6ee 55%, #f5fbf0 100%);
+  font-family: 'Noto Sans KZ', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+#petals { position:fixed; inset:0; pointer-events:none; z-index:0; }
+
+.wrap {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center;
+  padding:40px 20px 60px;
+}
+
+/* SCREENS */
+.scr { display:none; flex-direction:column; align-items:center; gap:26px; width:100%; }
+.scr.on { display:flex; animation:rise .55s cubic-bezier(.22,1,.36,1) both; }
+@keyframes rise { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* BADGE */
+.badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(90deg,#b01828,#d82040,#b01828);
+  color:#fff; font-size:.68rem; font-weight:700;
+  letter-spacing:.22em; text-transform:uppercase;
+  padding:8px 26px; border-radius:40px;
+  box-shadow:0 4px 18px rgba(180,20,40,.3);
+}
+.badge::before,.badge::after { content:'★'; font-size:.6rem; opacity:.8; }
+
+/* HEADING */
+.heading { text-align:center; }
+.heading .from { font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--rose); opacity:.7; margin-bottom:8px; }
+.heading h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,9vw,3.4rem); color:var(--rose); line-height:1.1; }
+.heading h1 i { font-style:italic; color:var(--gold); }
+.heading .hint { margin-top:10px; font-size:.76rem; color:var(--mute); font-weight:300; }
+
+/* MEDAL */
+.medal-block { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.medal-icon { font-size:5rem; filter:drop-shadow(0 6px 18px rgba(200,134,10,.45)); animation:bob 3.6s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.medal-label { font-size:.64rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); opacity:.7; }
+
+/* CARD */
+.card {
+  width:min(380px,96vw);
+  background:var(--card); border-radius:28px; padding:30px 26px;
+  box-shadow:var(--shd); border:1px solid var(--bdr);
+  position:relative; overflow:hidden;
+}
+.card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--rose),var(--glt),var(--rose)); }
+.card .lbl { font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--rose); opacity:.55; margin-bottom:14px; }
+.card .body { font-family:'Cormorant Garamond',serif; font-size:clamp(1.15rem,4.5vw,1.4rem); line-height:1.75; color:var(--text); margin-bottom:16px; }
+.card .body .r { color:var(--rose); }
+.card .sig { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--rose); text-align:right; font-style:italic; opacity:.85; }
+
+/* PHOTO */
+.photo-wrap {
+  width:min(380px,96vw); border-radius:24px; overflow:hidden;
+  box-shadow:var(--shd);
+  background: linear-gradient(135deg, #ffd0e0 0%, #ffe8a0 100%);
+  min-height: 200px;
+  display: flex; align-items: center; justify-content: center;
+}
+.photo-wrap img { width:100%; display:block; }
+.photo-placeholder { text-align:center; padding:40px 20px; color:var(--mute); }
+.photo-placeholder .ph-icon { font-size:3rem; margin-bottom:10px; }
+.photo-placeholder p { font-size:.8rem; line-height:1.6; }
+
+/* ══ УБЕГАЮЩАЯ КНОПКА ══
+   Выглядит как настоящая розовая кнопка,
+   но убегает при приближении — нажать невозможно */
+#yes-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: auto;
+  cursor: pointer;
+
+  font-family: 'Noto Sans KZ', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #c0315a 0%, #e8507a 100%);
+  border-radius: 50px;
+  padding: 15px 32px;
+  white-space: nowrap;
+  box-shadow: 0 6px 28px rgba(192,49,90,0.5), 0 2px 8px rgba(0,0,0,0.12);
+  letter-spacing: .03em;
+
+  /* плавное скольжение */
+  transition: left .18s cubic-bezier(.34,1.56,.64,1),
+              top  .18s cubic-bezier(.34,1.56,.64,1),
+              opacity .4s ease;
+
+  /* стартовая позиция — задаётся JS */
+  left: 50vw;
+  top:  80vh;
+}
+
+/* NO BUTTON */
+.no-btn {
+  padding:0 38px; height:54px; border-radius:50px;
+  border:2px solid var(--bdr);
+  background:rgba(255,255,255,.88);
+  font-family:'Noto Sans KZ',sans-serif;
+  font-size:.95rem; font-weight:600; color:var(--mute);
+  cursor:pointer; letter-spacing:.04em;
+  box-shadow:0 4px 18px rgba(0,0,0,.06);
+  transition:background .22s,color .22s,box-shadow .22s,transform .15s;
+}
+.no-btn:hover,.no-btn:active {
+  background:var(--rose); color:#fff;
+  box-shadow:0 8px 28px rgba(192,49,90,.32);
+  transform:scale(1.03);
+}
+
+/* FUNNY SCREEN */
+.funny {
+  width:min(380px,96vw);
+  background:var(--card); border-radius:28px; padding:44px 30px;
+  box-shadow:var(--shd); border:1px solid var(--bdr); text-align:center;
+}
+.funny .big { font-size:4.5rem; display:block; margin-bottom:20px; animation:wobb .5s ease; }
+@keyframes wobb { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-10deg) scale(1.15)} 70%{transform:rotate(10deg) scale(1.15)} }
+.funny h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.3rem,5.5vw,1.7rem); color:var(--rose); line-height:1.45; margin-bottom:16px; }
+.funny .num { font-size:3.2rem; font-weight:900; color:var(--gold); line-height:1; margin:8px 0 14px; }
+.funny .sub { font-size:.8rem; color:var(--mute); font-style:italic; line-height:1.6; }
+
+/* FINAL HEAD */
+.final-head { text-align:center; }
+.final-head .stars { font-size:2rem; letter-spacing:.12em; margin-bottom:10px; }
+.final-head h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,7vw,2.5rem); color:var(--rose); line-height:1.2; }
+.final-head p { font-size:.78rem; color:var(--mute); margin-top:8px; }
+</style>
+</head>
+<body>
+
+<canvas id="petals"></canvas>
+
+<!-- УБЕГАЮЩАЯ КНОПКА — поверх всего, только на экране 1 -->
+<div id="yes-ghost">Иә, сыйлық керек! 😍</div>
+
+<div class="wrap">
+
+  <!-- ЭКРАН 1 -->
+  <div id="s1" class="scr on">
+    <div class="badge">7 Мамыр — Жеңіс Күні</div>
+
+    <div class="heading">
+      <div class="from">қызыңыздан 💛</div>
+      <h1>Әке,<br><i>мерекеңізбен!</i></h1>
+      <div class="hint">Сізге арналған кішкентай сыйлық</div>
+    </div>
+
+    <div class="medal-block">
+      <div class="medal-icon">🎖️</div>
+      <div class="medal-label">Үздік Әке</div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Құттықтау</div>
+      <div class="body">
+        Сіздей <span class="r">мықты, сабырлы</span> және
+        <span class="r">мейірімді</span> әкем бар болғаны —
+        менің ең үлкен бақытым.<br><br>
+        Денсаулық, бақыт және ұзақ өмір тілеймін! 🎖️
+      </div>
+      <div class="sig">— Сіздің қызыңыз ❤️</div>
+    </div>
+
+    <button class="no-btn" onclick="goFunny()">Маған мұның керегі жоқ 🙄</button>
+  </div>
+
+  <!-- ЭКРАН 2: обратный отсчёт -->
+  <div id="s2" class="scr">
+    <div class="funny">
+      <span class="big">😤</span>
+      <h2>Жоқ дедіңіз...<br>Ендірек өзіңізден<br>қорқасыз! 😄</h2>
+      <div class="num" id="cd">5</div>
+      <div class="sub">Бір сәт... жіберіп жатырмын! 💌</div>
+    </div>
+  </div>
+
+  <!-- ЭКРАН 3: финал -->
+  <div id="s3" class="scr">
+    <div class="badge">7 Мамыр — Жеңіс Күні</div>
+
+    <div class="final-head">
+      <div class="stars">🌟 🎖️ 🌟</div>
+      <h2>Мерекеңізбен,<br>сүйікті Әке! 🎉</h2>
+      <p>Сізді шексіз жақсы көремін</p>
+    </div>
+
+    <!--
+      ▼ ФОТО: замените src на прямую ссылку
+        Пример: src="https://raw.githubusercontent.com/USERNAME/REPO/main/photo.jpg"
+    -->
+    <div class="photo-wrap">
+      <img
+        src="ФОТО_СІЛТЕМЕСІ"
+        alt="Біздің фото"
+        style="display:none;"
+        onload="this.style.display='block'; document.getElementById('photoPh').style.display='none';"
+        onerror="this.style.display='none';"
+      >
+      <div class="photo-placeholder" id="photoPh">
+        <div class="ph-icon">📸</div>
+        <p>Мұнда сізбен бірге<br>суретіміз болады 💛</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">Құттықтау</div>
+      <div class="body">
+        Сіздей <span class="r">мықты, сабырлы</span> және
+        <span class="r">мейірімді</span> әкем бар болғаны —
+        менің ең үлкен бақытым.<br><br>
+        Денсаулық, бақыт және ұзақ өмір тілеймін! 🎖️
+      </div>
+      <div class="sig">— Сіздің қызыңыз ❤️</div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!--
+  ▼ МУЗЫКА: замените src на прямую ссылку
+    Пример: src="https://raw.githubusercontent.com/USERNAME/REPO/main/song.mp3"
+-->
+<audio id="bgAudio" preload="auto" style="display:none;">
+  <source src="МУЗЫКА_СІЛТЕМЕСІ" type="audio/mpeg">
+</audio>
+
+<script>
+/* ── ЛЕПЕСТКИ ── */
+const cv = document.getElementById('petals');
+const cx = cv.getContext('2d');
+let W = cv.width = innerWidth, H = cv.height = innerHeight;
+addEventListener('resize', () => { W = cv.width = innerWidth; H = cv.height = innerHeight; });
+const PAL = ['#f7a8c0','#fbc8d8','#fde8f0','#f090b0','#ffd0e0','#ffb0c8','#e890a8'];
+const rC = () => PAL[Math.floor(Math.random() * PAL.length)];
+function leaf(c, x, y, s, a, op, col) {
+  c.save(); c.translate(x, y); c.rotate(a); c.globalAlpha = op;
+  c.beginPath();
+  c.moveTo(0, -s);
+  c.bezierCurveTo(s*1.05, -s*.4, s*1.05, s*.5, 0, s*.9);
+  c.bezierCurveTo(-s*1.05, s*.5, -s*1.05, -s*.4, 0, -s);
+  c.fillStyle = col; c.fill(); c.restore();
+}
+const ptl = Array.from({length: 55}, () => ({
+  x: Math.random()*W, y: Math.random()*H,
+  s: Math.random()*7+4, a: Math.random()*Math.PI*2,
+  sp: (Math.random()-.5)*.04,
+  dx: (Math.random()-.45)*1.1, dy: Math.random()*.85+.3,
+  sw: Math.random()*Math.PI*2, ss: Math.random()*.013+.004,
+  sa: Math.random()*1.4+.5, col: rC(), op: .3+Math.random()*.35
+}));
+(function loop() {
+  cx.clearRect(0, 0, W, H);
+  ptl.forEach(p => {
+    p.sw += p.ss; p.x += p.dx + Math.sin(p.sw)*p.sa; p.y += p.dy; p.a += p.sp;
+    if (p.y > H+20) { p.y = -20; p.x = Math.random()*W; p.col = rC(); }
+    if (p.x > W+20) p.x = -20;
+    if (p.x < -20) p.x = W+20;
+    leaf(cx, p.x, p.y, p.s, p.a, p.op, p.col);
+  });
+  requestAnimationFrame(loop);
+})();
+
+/* ── УБЕГАЮЩАЯ КНОПКА ── */
+const ghost = document.getElementById('yes-ghost');
+let ghostOn = true;
+
+function moveGhost(clientX, clientY) {
+  if (!ghostOn) return;
+  const gw = ghost.offsetWidth  || 210;
+  const gh = ghost.offsetHeight || 52;
+  const mg = 16;
+  const maxX = window.innerWidth  - gw - mg;
+  const maxY = window.innerHeight - gh - mg;
+
+  // Текущий центр кнопки
+  const gx = parseFloat(ghost.style.left || (window.innerWidth/2 - gw/2)) + gw/2;
+  const gy = parseFloat(ghost.style.top  || (window.innerHeight - gh - 30)) + gh/2;
+
+  // Вектор «от пальца/курсора»
+  let dx = gx - clientX;
+  let dy = gy - clientY;
+  const len = Math.sqrt(dx*dx + dy*dy) || 1;
+
+  // Сила отталкивания + случайность
+  const force = 200 + Math.random() * 160;
+  let nx = gx + (dx / len) * force + (Math.random() - .5) * 100 - gw/2;
+  let ny = gy + (dy / len) * force + (Math.random() - .5) * 100 - gh/2;
+
+  // Не выходить за экран
+  nx = Math.max(mg, Math.min(maxX, nx));
+  ny = Math.max(mg, Math.min(maxY, ny));
+
+  ghost.style.left = nx + 'px';
+  ghost.style.top  = ny + 'px';
+}
+
+ghost.addEventListener('mouseover', e => moveGhost(e.clientX, e.clientY));
+ghost.addEventListener('mousemove', e => moveGhost(e.clientX, e.clientY));
+ghost.addEventListener('touchstart', e => {
+  e.preventDefault();
+  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+ghost.addEventListener('touchmove', e => {
+  e.preventDefault();
+  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+
+// Начальная позиция — по центру внизу
+setTimeout(() => {
+  const gw = ghost.offsetWidth || 210;
+  const gh = ghost.offsetHeight || 52;
+  ghost.style.left = Math.max(16, (window.innerWidth / 2 - gw / 2)) + 'px';
+  ghost.style.top  = (window.innerHeight - gh - 30) + 'px';
+}, 100);
+
+function hideGhost() {
+  ghostOn = false;
+  ghost.style.opacity = '0';
+  setTimeout(() => { ghost.style.display = 'none'; }, 420);
+}
+
+/* ── ЭКРАНЫ ── */
+function showScreen(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  try { localStorage.setItem('ake_screen', id); } catch(e) {}
+}
+
+/* ── КНОПКА НЕТ → countdown → финал ── */
+function goFunny() {
+  hideGhost();
+  showScreen('s2');
+  let n = 5;
+  const el = document.getElementById('cd');
+  el.textContent = n;
+  const iv = setInterval(() => {
+    n--;
+    el.textContent = n;
+    if (n <= 0) { clearInterval(iv); goFinal(); }
+  }, 1000);
+}
+
+/* ── ФИНАЛЬНЫЙ ЭКРАН ── */
+function goFinal() {
+  hideGhost();
+  showScreen('s3');
+  setTimeout(startMusic, 400);
+}
+
+/* ── АУДИО ──
+   Автозапуск после перехода на финал.
+   Позиция сохраняется в localStorage каждую секунду.
+   При возврате через день — продолжает с того же места.
+   После окончания — перезапускается.
+*/
+const audio = document.getElementById('bgAudio');
+
+setInterval(() => {
+  if (audio && !audio.paused && audio.currentTime > 0) {
+    try { localStorage.setItem('ake_pos', audio.currentTime.toString()); } catch(e) {}
+  }
+}, 1000);
+
+audio.addEventListener('ended', () => {
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+  try { localStorage.removeItem('ake_pos'); } catch(e) {}
+});
+
+function startMusic() {
+  try {
+    const saved = parseFloat(localStorage.getItem('ake_pos')) || 0;
+    if (saved > 0) audio.currentTime = saved;
+  } catch(e) {}
+  audio.play().catch(() => {
+    // Если браузер заблокировал автовоспроизведение — запустим при первом касании
+    const unlock = () => { audio.play().catch(() => {}); };
+    document.addEventListener('touchstart', unlock, { once: true });
+    document.addEventListener('click', unlock, { once: true });
+  });
+}
+
+// Возврат на вкладку — продолжаем музыку
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    const screen = localStorage.getItem('ake_screen');
+    if (screen === 's3') {
+      showScreen('s3');
+      hideGhost();
+      startMusic();
+    }
+  }
+});
+
+/* ── ИНИЦИАЛИЗАЦИЯ при загрузке ── */
+(function init() {
+  const screen = localStorage.getItem('ake_screen');
+  if (screen === 's3') {
+    hideGhost();
+    showScreen('s3');
+    setTimeout(startMusic, 600);
+  } else if (screen === 's2') {
+    // Вышли во время отсчёта — сразу финал
+    goFinal();
+  }
+  // Иначе — экран 1, убегающая кнопка видна
+})();
+</script>
+</body>
+</html>
