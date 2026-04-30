@@ -230,13 +230,11 @@ function goFunny() {
   document.getElementById('s1').classList.remove('on');
   document.getElementById('s2').classList.add('on');
   
-  // === БРАУЗЕРДІ АЛДАУ (СНЯТИЕ БЛОКИРОВКИ) ===
+  // БРАУЗЕРДІ АЛДАУ (СНЯТИЕ БЛОКИРОВКИ)
   const audio = document.getElementById('bgAudio');
-  // В момент клика пробуем запустить и сразу ставим на паузу
   audio.play().then(() => {
     audio.pause();
   }).catch(() => {});
-  // ===========================================
 
   // 2.5 секундтан кейін финалға өту
   setTimeout(goFinal, 2500);
@@ -246,16 +244,29 @@ function goFinal() {
   document.getElementById('s2').classList.remove('on');
   document.getElementById('s3').classList.add('on');
   
-  // Теперь браузер разрешит включить звук
   const audio = document.getElementById('bgAudio');
-  audio.currentTime = 0; // Начинаем с начала
+  audio.currentTime = 0; 
   audio.play().catch(() => {});
 }
+
+// === ЖАҢА КОД: САЙТТАН ШЫҚҚАНДА МУЗЫКАНЫ ТОҚТАТУ ===
+document.addEventListener("visibilitychange", function() {
+  const audio = document.getElementById('bgAudio');
+  // Егер сайтты жапсақ, басқа вкладкаға өтсек немесе экран өшсе:
+  if (document.hidden) {
+    audio.pause(); 
+  } else {
+    // Егер сайтқа қайта кірсек ЖӘНЕ 3-ші экранда тұрсақ қана музыканы жалғастыру:
+    if (document.getElementById('s3').classList.contains('on')) {
+      audio.play().catch(() => {});
+    }
+  }
+});
+// ====================================================
 
 // Бастапқы күй (обновление жасағанда осы орындалады)
 window.onload = () => {
   localStorage.clear();
-  // Түйменің орнын реттеу
   ghost.style.left = (W/2 - ghost.offsetWidth/2) + 'px';
   ghost.style.top = (H - 100) + 'px';
 };
