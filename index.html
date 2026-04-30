@@ -92,9 +92,7 @@ body {
 .photo-placeholder .ph-icon { font-size:3rem; margin-bottom:10px; }
 .photo-placeholder p { font-size:.8rem; line-height:1.6; }
 
-/* ══ УБЕГАЮЩАЯ КНОПКА ══
-   Выглядит как настоящая розовая кнопка,
-   но убегает при приближении — нажать невозможно */
+/* ══ УБЕГАЮЩАЯ КНОПКА ══ */
 #yes-ghost {
   position: fixed;
   z-index: 9999;
@@ -112,12 +110,10 @@ body {
   box-shadow: 0 6px 28px rgba(192,49,90,0.5), 0 2px 8px rgba(0,0,0,0.12);
   letter-spacing: .03em;
 
-  /* плавное скольжение */
   transition: left .18s cubic-bezier(.34,1.56,.64,1),
               top  .18s cubic-bezier(.34,1.56,.64,1),
               opacity .4s ease;
 
-  /* стартовая позиция — задаётся JS */
   left: 50vw;
   top:  80vh;
 }
@@ -142,14 +138,13 @@ body {
 /* FUNNY SCREEN */
 .funny {
   width:min(380px,96vw);
-  background:var(--card); border-radius:28px; padding:44px 30px;
+  background:var(--card); border-radius:28px; padding:50px 30px;
   box-shadow:var(--shd); border:1px solid var(--bdr); text-align:center;
 }
 .funny .big { font-size:4.5rem; display:block; margin-bottom:20px; animation:wobb .5s ease; }
 @keyframes wobb { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-10deg) scale(1.15)} 70%{transform:rotate(10deg) scale(1.15)} }
-.funny h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.3rem,5.5vw,1.7rem); color:var(--rose); line-height:1.45; margin-bottom:16px; }
-.funny .num { font-size:3.2rem; font-weight:900; color:var(--gold); line-height:1; margin:8px 0 14px; }
-.funny .sub { font-size:.8rem; color:var(--mute); font-style:italic; line-height:1.6; }
+.funny h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,6vw,1.8rem); color:var(--rose); line-height:1.45; margin-bottom:16px; }
+.funny .sub { font-size:.85rem; color:var(--mute); font-style:italic; line-height:1.6; margin-top: 10px; }
 
 /* FINAL HEAD */
 .final-head { text-align:center; }
@@ -196,13 +191,12 @@ body {
     <button class="no-btn" onclick="goFunny()">Маған мұның керегі жоқ 🙄</button>
   </div>
 
-  <!-- ЭКРАН 2: обратный отсчёт -->
+  <!-- ЭКРАН 2: шуточное "отчаяние" без таймера -->
   <div id="s2" class="scr">
     <div class="funny">
-      <span class="big">😤</span>
-      <h2>Жоқ дедіңіз...<br>Ендірек өзіңізден<br>қорқасыз! 😄</h2>
-      <div class="num" id="cd">5</div>
-      <div class="sub">Бір сәт... жіберіп жатырмын! 💌</div>
+      <span class="big">😱</span>
+      <h2>Сыйлық керек емес пе?!<br>Жарайды... 💔</h2>
+      <div class="sub">Қалжыңдаймын! 🥰 Қазір...</div>
     </div>
   </div>
 
@@ -216,10 +210,7 @@ body {
       <p>Сізді шексіз жақсы көремін</p>
     </div>
 
-    <!--
-      ▼ ФОТО: замените src на прямую ссылку
-        Пример: src="https://raw.githubusercontent.com/USERNAME/REPO/main/photo.jpg"
-    -->
+    <!-- ФОТО -->
     <div class="photo-wrap">
       <img
         src="ФОТО_СІЛТЕМЕСІ"
@@ -248,10 +239,7 @@ body {
 
 </div><!-- /wrap -->
 
-<!--
-  ▼ МУЗЫКА: замените src на прямую ссылку
-    Пример: src="https://raw.githubusercontent.com/USERNAME/REPO/main/song.mp3"
--->
+<!-- МУЗЫКА -->
 <audio id="bgAudio" preload="auto" style="display:none;">
   <source src="МУЗЫКА_СІЛТЕМЕСІ" type="audio/mpeg">
 </audio>
@@ -304,21 +292,17 @@ function moveGhost(clientX, clientY) {
   const maxX = window.innerWidth  - gw - mg;
   const maxY = window.innerHeight - gh - mg;
 
-  // Текущий центр кнопки
   const gx = parseFloat(ghost.style.left || (window.innerWidth/2 - gw/2)) + gw/2;
   const gy = parseFloat(ghost.style.top  || (window.innerHeight - gh - 30)) + gh/2;
 
-  // Вектор «от пальца/курсора»
   let dx = gx - clientX;
   let dy = gy - clientY;
   const len = Math.sqrt(dx*dx + dy*dy) || 1;
 
-  // Сила отталкивания + случайность
   const force = 200 + Math.random() * 160;
   let nx = gx + (dx / len) * force + (Math.random() - .5) * 100 - gw/2;
   let ny = gy + (dy / len) * force + (Math.random() - .5) * 100 - gh/2;
 
-  // Не выходить за экран
   nx = Math.max(mg, Math.min(maxX, nx));
   ny = Math.max(mg, Math.min(maxY, ny));
 
@@ -337,7 +321,6 @@ ghost.addEventListener('touchmove', e => {
   moveGhost(e.touches[0].clientX, e.touches[0].clientY);
 }, { passive: false });
 
-// Начальная позиция — по центру внизу
 setTimeout(() => {
   const gw = ghost.offsetWidth || 210;
   const gh = ghost.offsetHeight || 52;
@@ -358,18 +341,15 @@ function showScreen(id) {
   try { localStorage.setItem('ake_screen', id); } catch(e) {}
 }
 
-/* ── КНОПКА НЕТ → countdown → финал ── */
+/* ── КНОПКА НЕТ → шуточное отчаяние → финал ── */
 function goFunny() {
   hideGhost();
   showScreen('s2');
-  let n = 5;
-  const el = document.getElementById('cd');
-  el.textContent = n;
-  const iv = setInterval(() => {
-    n--;
-    el.textContent = n;
-    if (n <= 0) { clearInterval(iv); goFinal(); }
-  }, 1000);
+  
+  // Показываем шуточный экран на 2.5 секунды, чтобы он успел прочитать и испугаться, затем сразу финал
+  setTimeout(() => {
+    goFinal();
+  }, 2500); 
 }
 
 /* ── ФИНАЛЬНЫЙ ЭКРАН ── */
@@ -379,12 +359,7 @@ function goFinal() {
   setTimeout(startMusic, 400);
 }
 
-/* ── АУДИО ──
-   Автозапуск после перехода на финал.
-   Позиция сохраняется в localStorage каждую секунду.
-   При возврате через день — продолжает с того же места.
-   После окончания — перезапускается.
-*/
+/* ── АУДИО ── */
 const audio = document.getElementById('bgAudio');
 
 setInterval(() => {
@@ -405,14 +380,12 @@ function startMusic() {
     if (saved > 0) audio.currentTime = saved;
   } catch(e) {}
   audio.play().catch(() => {
-    // Если браузер заблокировал автовоспроизведение — запустим при первом касании
     const unlock = () => { audio.play().catch(() => {}); };
     document.addEventListener('touchstart', unlock, { once: true });
     document.addEventListener('click', unlock, { once: true });
   });
 }
 
-// Возврат на вкладку — продолжаем музыку
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     const screen = localStorage.getItem('ake_screen');
@@ -424,7 +397,7 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-/* ── ИНИЦИАЛИЗАЦИЯ при загрузке ── */
+/* ── ИНИЦИАЛИЗАЦИЯ ── */
 (function init() {
   const screen = localStorage.getItem('ake_screen');
   if (screen === 's3') {
@@ -432,10 +405,8 @@ document.addEventListener('visibilitychange', () => {
     showScreen('s3');
     setTimeout(startMusic, 600);
   } else if (screen === 's2') {
-    // Вышли во время отсчёта — сразу финал
     goFinal();
   }
-  // Иначе — экран 1, убегающая кнопка видна
 })();
 </script>
 </body>
