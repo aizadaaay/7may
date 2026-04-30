@@ -64,7 +64,6 @@ body {
 .medal-block { display:flex; flex-direction:column; align-items:center; gap:6px; }
 .medal-icon { font-size:5rem; filter:drop-shadow(0 6px 18px rgba(200,134,10,.45)); animation:bob 3.6s ease-in-out infinite; }
 @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-.medal-label { font-size:.64rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); opacity:.7; }
 
 /* CARD */
 .card {
@@ -90,7 +89,6 @@ body {
 .photo-wrap img { width:100%; display:block; }
 .photo-placeholder { text-align:center; padding:40px 20px; color:var(--mute); }
 .photo-placeholder .ph-icon { font-size:3rem; margin-bottom:10px; }
-.photo-placeholder p { font-size:.8rem; line-height:1.6; }
 
 /* ══ УБЕГАЮЩАЯ КНОПКА ══ */
 #yes-ghost {
@@ -98,66 +96,40 @@ body {
   z-index: 9999;
   pointer-events: auto;
   cursor: pointer;
-
   font-family: 'Noto Sans KZ', sans-serif;
-  font-size: .95rem;
-  font-weight: 700;
-  color: #fff;
+  font-size: .95rem; font-weight: 700; color: #fff;
   background: linear-gradient(135deg, #c0315a 0%, #e8507a 100%);
-  border-radius: 50px;
-  padding: 15px 32px;
-  white-space: nowrap;
-  box-shadow: 0 6px 28px rgba(192,49,90,0.5), 0 2px 8px rgba(0,0,0,0.12);
-  letter-spacing: .03em;
-
-  transition: left .18s cubic-bezier(.34,1.56,.64,1),
-              top  .18s cubic-bezier(.34,1.56,.64,1),
-              opacity .4s ease;
-
-  left: 50vw;
-  top:  80vh;
+  border-radius: 50px; padding: 15px 32px; white-space: nowrap;
+  box-shadow: 0 6px 28px rgba(192,49,90,0.5);
+  transition: left .18s cubic-bezier(.34,1.56,.64,1), top .18s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
+  left: 50vw; top: 80vh;
 }
 
 /* NO BUTTON */
 .no-btn {
   padding:0 38px; height:54px; border-radius:50px;
-  border:2px solid var(--bdr);
-  background:rgba(255,255,255,.88);
-  font-family:'Noto Sans KZ',sans-serif;
-  font-size:.95rem; font-weight:600; color:var(--mute);
-  cursor:pointer; letter-spacing:.04em;
-  box-shadow:0 4px 18px rgba(0,0,0,.06);
-  transition:background .22s,color .22s,box-shadow .22s,transform .15s;
-}
-.no-btn:hover,.no-btn:active {
-  background:var(--rose); color:#fff;
-  box-shadow:0 8px 28px rgba(192,49,90,.32);
-  transform:scale(1.03);
+  border:2px solid var(--bdr); background:rgba(255,255,255,.88);
+  font-family:'Noto Sans KZ',sans-serif; font-size:.95rem; font-weight:600; color:var(--mute);
+  cursor:pointer; box-shadow:0 4px 18px rgba(0,0,0,.06);
 }
 
 /* FUNNY SCREEN */
 .funny {
-  width:min(380px,96vw);
-  background:var(--card); border-radius:28px; padding:50px 30px;
+  width:min(380px,96vw); background:var(--card); border-radius:28px; padding:50px 30px;
   box-shadow:var(--shd); border:1px solid var(--bdr); text-align:center;
 }
 .funny .big { font-size:4.5rem; display:block; margin-bottom:20px; animation:wobb .5s ease; }
-@keyframes wobb { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-10deg) scale(1.15)} 70%{transform:rotate(10deg) scale(1.15)} }
-.funny h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.4rem,6vw,1.8rem); color:var(--rose); line-height:1.45; margin-bottom:16px; }
-.funny .sub { font-size:.85rem; color:var(--mute); font-style:italic; line-height:1.6; margin-top: 10px; }
+@keyframes wobb { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-10deg) scale(1.1)} 70%{transform:rotate(10deg) scale(1.1)} }
 
-/* FINAL HEAD */
 .final-head { text-align:center; }
-.final-head .stars { font-size:2rem; letter-spacing:.12em; margin-bottom:10px; }
-.final-head h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,7vw,2.5rem); color:var(--rose); line-height:1.2; }
-.final-head p { font-size:.78rem; color:var(--mute); margin-top:8px; }
+.final-head h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,7vw,2.5rem); color:var(--rose); }
 </style>
 </head>
 <body>
 
 <canvas id="petals"></canvas>
 
-<!-- УБЕГАЮЩАЯ КНОПКА — поверх всего, только на экране 1 -->
+<!-- УБЕГАЮЩАЯ КНОПКА -->
 <div id="yes-ghost">Иә, сыйлық керек! 😍</div>
 
 <div class="wrap">
@@ -165,249 +137,116 @@ body {
   <!-- ЭКРАН 1 -->
   <div id="s1" class="scr on">
     <div class="badge">7 Мамыр — Жеңіс Күні</div>
-
     <div class="heading">
       <div class="from">қызыңыздан 💛</div>
       <h1>Әке,<br><i>мерекеңізбен!</i></h1>
       <div class="hint">Сізге арналған кішкентай сыйлық</div>
     </div>
-
-    <div class="medal-block">
-      <div class="medal-icon">🎖️</div>
-      <div class="medal-label">Үздік Әке</div>
-    </div>
-
+    <div class="medal-block"><div class="medal-icon">🎖️</div></div>
     <div class="card">
       <div class="lbl">Құттықтау</div>
       <div class="body">
-        Сіздей <span class="r">мықты, сабырлы</span> және
-        <span class="r">мейірімді</span> әкем бар болғаны —
-        менің ең үлкен бақытым.<br><br>
-        Денсаулық, бақыт және ұзақ өмір тілеймін! 🎖️
+        Сіздей <span class="r">мықты, сабырлы</span> және <span class="r">мейірімді</span> әкем бар болғаны — менің ең үлкен бақытым.
       </div>
-      <div class="sig">— Сіздің қызыңыз ❤️</div>
     </div>
-
     <button class="no-btn" onclick="goFunny()">Маған мұның керегі жоқ 🙄</button>
   </div>
 
-  <!-- ЭКРАН 2: шуточное "отчаяние" без таймера -->
+  <!-- ЭКРАН 2: "Реніш" экраны -->
   <div id="s2" class="scr">
     <div class="funny">
       <span class="big">😱</span>
       <h2>Сыйлық керек емес пе?!<br>Жарайды... 💔</h2>
-      <div class="sub">Қалжыңдаймын! 🥰 Қазір...</div>
+      <p style="color:var(--mute); font-style:italic; margin-top:15px;">Қалжыңдаймын! 🥰 Қазір...</p>
     </div>
   </div>
 
-  <!-- ЭКРАН 3: финал -->
+  <!-- ЭКРАН 3: ФИНАЛ -->
   <div id="s3" class="scr">
-    <div class="badge">7 Мамыр — Жеңіс Күні</div>
-
+    <div class="badge">Мерекеңізбен! 🎉</div>
     <div class="final-head">
-      <div class="stars">🌟 🎖️ 🌟</div>
-      <h2>Мерекеңізбен,<br>сүйікті Әке! 🎉</h2>
-      <p>Сізді шексіз жақсы көремін</p>
+      <h2>Сүйікті Әке! 🎉</h2>
+      <p style="color:var(--mute); margin-top:5px;">Сізді шексіз жақсы көремін</p>
     </div>
-
-    <!-- ФОТО -->
     <div class="photo-wrap">
-      <img
-        src="ФОТО_СІЛТЕМЕСІ"
-        alt="Біздің фото"
-        style="display:none;"
-        onload="this.style.display='block'; document.getElementById('photoPh').style.display='none';"
-        onerror="this.style.display='none';"
-      >
+      <img src="ФОТО_СІЛТЕМЕСІ" alt="Біздің фото" id="finalPhoto" style="display:none;" onload="this.style.display='block'; document.getElementById('photoPh').style.display='none';">
       <div class="photo-placeholder" id="photoPh">
-        <div class="ph-icon">📸</div>
-        <p>Мұнда сізбен бірге<br>суретіміз болады 💛</p>
+        <div style="font-size:3rem">📸</div>
+        <p>Мұнда біздің суретіміз болады 💛</p>
       </div>
     </div>
-
     <div class="card">
-      <div class="lbl">Құттықтау</div>
       <div class="body">
-        Сіздей <span class="r">мықты, сабырлы</span> және
-        <span class="r">мейірімді</span> әкем бар болғаны —
-        менің ең үлкен бақытым.<br><br>
-        Денсаулық, бақыт және ұзақ өмір тілеймін! 🎖️
+        Әрқашан <span class="r">аман болыңыз</span>! Сіз — біздің тірегімізсіз. 🎖️
       </div>
-      <div class="sig">— Сіздің қызыңыз ❤️</div>
+      <div class="sig">— Қызыңыздан ❤️</div>
     </div>
   </div>
 
-</div><!-- /wrap -->
+</div>
 
-<!-- МУЗЫКА -->
-<audio id="bgAudio" preload="auto" style="display:none;">
+<audio id="bgAudio" preload="auto">
   <source src="МУЗЫКА_СІЛТЕМЕСІ" type="audio/mpeg">
 </audio>
 
 <script>
-/* ── ЛЕПЕСТКИ ── */
-const cv = document.getElementById('petals');
-const cx = cv.getContext('2d');
+/* ЛЕПЕСТКИ */
+const cv = document.getElementById('petals'); const cx = cv.getContext('2d');
 let W = cv.width = innerWidth, H = cv.height = innerHeight;
-addEventListener('resize', () => { W = cv.width = innerWidth; H = cv.height = innerHeight; });
-const PAL = ['#f7a8c0','#fbc8d8','#fde8f0','#f090b0','#ffd0e0','#ffb0c8','#e890a8'];
-const rC = () => PAL[Math.floor(Math.random() * PAL.length)];
-function leaf(c, x, y, s, a, op, col) {
-  c.save(); c.translate(x, y); c.rotate(a); c.globalAlpha = op;
-  c.beginPath();
-  c.moveTo(0, -s);
-  c.bezierCurveTo(s*1.05, -s*.4, s*1.05, s*.5, 0, s*.9);
-  c.bezierCurveTo(-s*1.05, s*.5, -s*1.05, -s*.4, 0, -s);
-  c.fillStyle = col; c.fill(); c.restore();
-}
-const ptl = Array.from({length: 55}, () => ({
-  x: Math.random()*W, y: Math.random()*H,
-  s: Math.random()*7+4, a: Math.random()*Math.PI*2,
-  sp: (Math.random()-.5)*.04,
-  dx: (Math.random()-.45)*1.1, dy: Math.random()*.85+.3,
-  sw: Math.random()*Math.PI*2, ss: Math.random()*.013+.004,
-  sa: Math.random()*1.4+.5, col: rC(), op: .3+Math.random()*.35
+const PAL = ['#f7a8c0','#fbc8d8','#fde8f0'];
+const ptl = Array.from({length: 40}, () => ({
+  x: Math.random()*W, y: Math.random()*H, s: Math.random()*5+3, a: Math.random()*2,
+  dx: Math.random()-0.5, dy: Math.random()+0.5, col: PAL[Math.floor(Math.random()*3)]
 }));
-(function loop() {
-  cx.clearRect(0, 0, W, H);
+function loop() {
+  cx.clearRect(0,0,W,H);
   ptl.forEach(p => {
-    p.sw += p.ss; p.x += p.dx + Math.sin(p.sw)*p.sa; p.y += p.dy; p.a += p.sp;
-    if (p.y > H+20) { p.y = -20; p.x = Math.random()*W; p.col = rC(); }
-    if (p.x > W+20) p.x = -20;
-    if (p.x < -20) p.x = W+20;
-    leaf(cx, p.x, p.y, p.s, p.a, p.op, p.col);
+    p.x += p.dx; p.y += p.dy; if(p.y > H) p.y = -10;
+    cx.globalAlpha = 0.6; cx.fillStyle = p.col; cx.beginPath();
+    cx.arc(p.x, p.y, p.s, 0, Math.PI*2); cx.fill();
   });
   requestAnimationFrame(loop);
-})();
+}
+loop();
 
-/* ── УБЕГАЮЩАЯ КНОПКА ── */
+/* УБЕГАЮЩАЯ КНОПКА */
 const ghost = document.getElementById('yes-ghost');
 let ghostOn = true;
-
-function moveGhost(clientX, clientY) {
-  if (!ghostOn) return;
-  const gw = ghost.offsetWidth  || 210;
-  const gh = ghost.offsetHeight || 52;
-  const mg = 16;
-  const maxX = window.innerWidth  - gw - mg;
-  const maxY = window.innerHeight - gh - mg;
-
-  const gx = parseFloat(ghost.style.left || (window.innerWidth/2 - gw/2)) + gw/2;
-  const gy = parseFloat(ghost.style.top  || (window.innerHeight - gh - 30)) + gh/2;
-
-  let dx = gx - clientX;
-  let dy = gy - clientY;
-  const len = Math.sqrt(dx*dx + dy*dy) || 1;
-
-  const force = 200 + Math.random() * 160;
-  let nx = gx + (dx / len) * force + (Math.random() - .5) * 100 - gw/2;
-  let ny = gy + (dy / len) * force + (Math.random() - .5) * 100 - gh/2;
-
-  nx = Math.max(mg, Math.min(maxX, nx));
-  ny = Math.max(mg, Math.min(maxY, ny));
-
-  ghost.style.left = nx + 'px';
-  ghost.style.top  = ny + 'px';
+function moveGhost(e) {
+  if(!ghostOn) return;
+  const x = e.clientX || (e.touches && e.touches[0].clientX);
+  const y = e.clientY || (e.touches && e.touches[0].clientY);
+  const maxX = W - ghost.offsetWidth - 20;
+  const maxY = H - ghost.offsetHeight - 20;
+  ghost.style.left = Math.random() * maxX + 'px';
+  ghost.style.top = Math.random() * maxY + 'px';
 }
+ghost.addEventListener('mouseover', moveGhost);
+ghost.addEventListener('touchstart', (e) => { e.preventDefault(); moveGhost(e); });
 
-ghost.addEventListener('mouseover', e => moveGhost(e.clientX, e.clientY));
-ghost.addEventListener('mousemove', e => moveGhost(e.clientX, e.clientY));
-ghost.addEventListener('touchstart', e => {
-  e.preventDefault();
-  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
-ghost.addEventListener('touchmove', e => {
-  e.preventDefault();
-  moveGhost(e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
-
-setTimeout(() => {
-  const gw = ghost.offsetWidth || 210;
-  const gh = ghost.offsetHeight || 52;
-  ghost.style.left = Math.max(16, (window.innerWidth / 2 - gw / 2)) + 'px';
-  ghost.style.top  = (window.innerHeight - gh - 30) + 'px';
-}, 100);
-
-function hideGhost() {
-  ghostOn = false;
-  ghost.style.opacity = '0';
-  setTimeout(() => { ghost.style.display = 'none'; }, 420);
-}
-
-/* ── ЭКРАНЫ ── */
-function showScreen(id) {
-  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  try { localStorage.setItem('ake_screen', id); } catch(e) {}
-}
-
-/* ── КНОПКА НЕТ → шуточное отчаяние → финал ── */
+/* ФУНКЦИЯЛАР */
 function goFunny() {
-  hideGhost();
-  showScreen('s2');
-  
-  // Показываем шуточный экран на 2.5 секунды, чтобы он успел прочитать и испугаться, затем сразу финал
-  setTimeout(() => {
-    goFinal();
-  }, 2500); 
+  ghostOn = false; ghost.style.display = 'none';
+  document.getElementById('s1').classList.remove('on');
+  document.getElementById('s2').classList.add('on');
+  // 2.5 секундтан кейін финалға өту
+  setTimeout(goFinal, 2500);
 }
 
-/* ── ФИНАЛЬНЫЙ ЭКРАН ── */
 function goFinal() {
-  hideGhost();
-  showScreen('s3');
-  setTimeout(startMusic, 400);
+  document.getElementById('s2').classList.remove('on');
+  document.getElementById('s3').classList.add('on');
+  document.getElementById('bgAudio').play().catch(() => {});
 }
 
-/* ── АУДИО ── */
-const audio = document.getElementById('bgAudio');
-
-setInterval(() => {
-  if (audio && !audio.paused && audio.currentTime > 0) {
-    try { localStorage.setItem('ake_pos', audio.currentTime.toString()); } catch(e) {}
-  }
-}, 1000);
-
-audio.addEventListener('ended', () => {
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
-  try { localStorage.removeItem('ake_pos'); } catch(e) {}
-});
-
-function startMusic() {
-  try {
-    const saved = parseFloat(localStorage.getItem('ake_pos')) || 0;
-    if (saved > 0) audio.currentTime = saved;
-  } catch(e) {}
-  audio.play().catch(() => {
-    const unlock = () => { audio.play().catch(() => {}); };
-    document.addEventListener('touchstart', unlock, { once: true });
-    document.addEventListener('click', unlock, { once: true });
-  });
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    const screen = localStorage.getItem('ake_screen');
-    if (screen === 's3') {
-      showScreen('s3');
-      hideGhost();
-      startMusic();
-    }
-  }
-});
-
-/* ── ИНИЦИАЛИЗАЦИЯ ── */
-(function init() {
-  const screen = localStorage.getItem('ake_screen');
-  if (screen === 's3') {
-    hideGhost();
-    showScreen('s3');
-    setTimeout(startMusic, 600);
-  } else if (screen === 's2') {
-    goFinal();
-  }
-})();
+// Бастапқы күй (обновление жасағанда осы орындалады)
+window.onload = () => {
+  // localStorage-ты толық тазалау
+  localStorage.clear();
+  // Түйменің орнын реттеу
+  ghost.style.left = (W/2 - ghost.offsetWidth/2) + 'px';
+  ghost.style.top = (H - 100) + 'px';
+};
 </script>
 </body>
 </html>
